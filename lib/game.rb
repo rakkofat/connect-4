@@ -1,5 +1,3 @@
-require_relative 'helper'
-
 class Game
 
   attr_reader :board, :player_1, :player_2
@@ -12,19 +10,14 @@ class Game
   end
 
   def play
-    # Welcome Message
     welcome
-    # Assign players
     set_player_name(@player_1)
     set_player_name(@player_2)
-    # Roll for turn
     roll
-    # show board
-    @board.display
-    # until connect4?
-    #   alternate player-turns
-    # congratulate winner
-    "Jonathan"
+    until @board.connect4?
+      turn
+    end
+    congratulate_winner
   end
 
   def welcome
@@ -42,12 +35,31 @@ class Game
     puts "Congratulations, #{first.name}! You play first."
   end
 
-  def turn(current)
-    print "Please choose a row: "
-    choice = gets.chomp
-    until choice.downcase =~ /[abcdef]/
-      print "Please enter a valid row: "
-      choice = gets.chomp
+  def turn
+    @board.display
+    @board.drop_token(get_play, @current.token)
+    unless @board.connect4?
+      switch_current_player
     end
   end
+
+  def get_play
+    print "#{@current.name}, please choose a row: "
+    choice = gets.chomp.upcase
+    until choice =~ /[ABCDEFG]/ && !@board.full?(choice)
+      print "Please enter a valid row: "
+      choice = gets.chomp.upcase
+    end
+    choice
+  end
+
+  def switch_current_player
+    @current == @player_1 ? @current = @player_2 : @current = @player_1
+  end
+
+  def congratulate_winner
+    @board.display
+    puts "Congratulations #{@current.name}! You won!"
+  end
+
 end

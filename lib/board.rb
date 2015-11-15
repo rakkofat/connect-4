@@ -1,7 +1,4 @@
-require 'pry'
-
 class Board
-  require 'matrix'
 
   COLS = ['A','B','C','D','E','F','G']
 
@@ -22,10 +19,10 @@ class Board
   end
 
   def display
-    @board.each_with_index do |row, i|
+    @board.reverse.each_with_index do |row, i|
       row_line = "| "
       row.each_with_index do |col, index|
-        col.nil? ? row_line << "  " : row_line << col
+        col.nil? ? row_line << "  " : row_line << "#{col} "
         row_line << "|" if index == row.length - 1
       end
       puts row_line
@@ -34,6 +31,7 @@ class Board
         ('A'..'G').each do |l|
           l == 'G' ? last_line << 'G |' : last_line << "#{l} "
         end
+        puts "|---------------|"
         puts last_line
       end
     end
@@ -68,6 +66,9 @@ class Board
   end
 
   def connect4?
+    if @last_drop == nil
+      return false
+    end
     row = get_row(@last_drop)
     column = get_column(@last_drop)
     forward_diagonal = get_forward_diagonal(@last_drop)
@@ -106,7 +107,7 @@ class Board
 
   def get_forward_diagonal(position)
     diagonal = []
-    factor = [5 - position[0], position[1]].min
+    factor = [5 - position[0], 6 - position[1]].min
     row = position[0] + factor
     col = position[1] + factor
     until row < 0 || col < 0
