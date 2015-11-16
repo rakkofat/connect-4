@@ -14,10 +14,10 @@ class Game
     set_player_name(@player_1)
     set_player_name(@player_2)
     roll
-    until @board.connect4?
+    until @board.connect4? || @board.full_up?
       turn
     end
-    congratulate_winner
+    relay_outcome
   end
 
   def welcome
@@ -57,9 +57,13 @@ class Game
     @current == @player_1 ? @current = @player_2 : @current = @player_1
   end
 
-  def congratulate_winner
+  def relay_outcome
     @board.display
-    puts "Congratulations #{@current.name}! You won!"
+    if @board.connect4?
+      puts "Congratulations #{@current.name}! You won!"
+    else
+      puts "Aw snap! A tie! You both lose!"
+    end
   end
 
 end

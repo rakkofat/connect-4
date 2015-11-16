@@ -57,6 +57,13 @@ class Board
     which_row?(col).nil?
   end
 
+  def full_up?
+    ('A'..'G').each do |col|
+      return false unless full?(col)
+    end
+    true
+  end
+
   def test_board(board)
     @board = board
   end

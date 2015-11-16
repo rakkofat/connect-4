@@ -9,6 +9,20 @@ RSpec.describe Game do
   let(:connect4) { [[nil, nil, nil, nil],[nil, nil, nil, nil],[nil, nil, nil, nil],[nil, nil, nil, nil]] }
   let(:row_win) { [[nil, nil, nil, nil],["X", "X", "X", "X"],[nil, nil, nil, nil],[nil, nil, nil, nil]] }
   let(:col_win) { [[nil, nil, nil, "O"],[nil, nil, nil, "O"],[nil, nil, nil, "O"],[nil, nil, nil, "O"]] }
+  let(:tie) { [
+    ["X", "O", "X", "O", "X", "O", "X"],
+    ["X", "O", "X", "O", "X", "O", "X"],
+    ["X", "O", "X", "O", "X", "O", "X"],
+    ["O", "X", "O", "X", "O", "X", "O"],
+    ["O", "X", 'O', "X", "O", "X", "O"],
+    ["O", "X", "O", "X", "O", "X", "O"]] }
+  let(:not_tie) { [
+    ["X", "O", "X", "O", "X", "O", "X"],
+    ["X", "O", "X", "O", "X", "O", "X"],
+    ["X", "O", "X", "O", "X", "O", "X"],
+    ["X", "X", "O", "X", "O", "X", "O"],
+    ["O", "X", 'O', "X", "O", "X", "O"],
+    ["O", "X", "O", "X", "O", "X", "O"]] }
 
   describe "#Initialize" do
     it 'has a board' do
@@ -27,20 +41,17 @@ RSpec.describe Game do
   end
 
   describe "#play" do
-    let(:vertical_win_board) { [["X", nil, nil],["X", nil, nil],["X", nil, nil]] }
-
-    # it 'congratulates a vertical winner' do
-    #   g.board.test_board(vertical_win_board)
-    #   expect(g.play).to eq("Jonathan")
-    # end
-
-    it 'congratulates a horizontal winner' do
-
+    it 'lets both players know when they cannot win' do
+      g.board.test_board(tie)
+      expect { g.relay_outcome }.to output(/Aw snap! A tie! You both lose!/).to_stdout
     end
 
-    it 'congratulates a diagonal winner' do
-
+    it 'lets a player know when they win' do
+      g.board.test_board(not_tie)
+      g.board.set_last_drop([0,0])
+      expect { g.relay_outcome }.not_to output(/Aw snap! A tie! You both lose!/).to_stdout
     end
+
   end
 
   describe "#welcome" do

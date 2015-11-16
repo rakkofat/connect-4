@@ -30,6 +30,20 @@ RSpec.describe Board do
     [nil, nil, nil, nil, "O", nil, nil],
     [nil, nil, nil, nil, nil, "O", nil],
     [nil, nil, nil, nil, nil, nil, "O"]] }
+  let(:tie) { [
+    ["X", "O", "X", "O", "X", "O", "X"],
+    ["X", "O", "X", "O", "X", "O", "X"],
+    ["X", "O", "X", "O", "X", "O", "X"],
+    ["O", "X", "O", "X", "O", "X", "O"],
+    ["O", "X", 'O', "X", "O", "X", "O"],
+    ["O", "X", "O", "X", "O", "X", "O"]] }
+  let(:not_tie) { [
+    ["X", "O", "X", "O", "X", "O", "X"],
+    ["X", "O", "X", "O", "X", "O", "X"],
+    ["X", "O", "X", "O", "X", "O", "X"],
+    ["X", "X", "O", "X", "O", "X", "O"],
+    ["O", "X", 'O', "X", "O", "X", "O"],
+    ["O", "X", "O", "X", "O", "X", "O"]] }
 
   describe "#Initialize" do
     it 'has a 2D board array' do
@@ -108,6 +122,18 @@ RSpec.describe Board do
       expect(board.connect4?).to eq(false)
     end
 
+  end
+
+  describe "#full_up?" do
+    it 'returns true if the board is completely full' do
+      board.test_board(tie)
+      expect(board.full_up?).to eq(true)
+    end
+
+    it 'returns false if the board is not completely full' do
+      board.test_board(row_win)
+      expect(board.full_up?).to eq(false)
+    end
   end
 
 
